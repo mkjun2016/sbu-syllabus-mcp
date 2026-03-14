@@ -70,20 +70,65 @@ async def get_schedule(course_code: str) -> list[dict] | str:
 
 
 @mcp.tool()
-async def upload_syllabus(course_code: str, syllabus_text: str) -> str:
+async def upload_syllabus(
+    course_code: str,
+    title: str,
+    credits: int,
+    semester: str,
+    modality: str,
+    instructors: list[dict],
+    meetings: list[dict],
+    grading: list[dict],
+    grade_scale: list[dict],
+    exams: list[dict],
+    policies: dict,
+    schedule: list[dict],
+    textbook: str | None = None,
+) -> str:
     """
-    Upload and parse syllabus from text content.
+    Upload structured syllabus data.
+
+    Claude should parse the syllabus PDF and extract all fields before calling this tool.
 
     Args:
         course_code: Course code like "CSE 351"
-        syllabus_text: Full text content of the syllabus PDF
+        title: Course title like "Introduction to Data Science"
+        credits: Number of credits
+        semester: Semester like "Spring 2026"
+        modality: "in-person", "online-async", or "hybrid"
+        instructors: List of instructors, each with "name", "email" (optional), "office_hours" (optional)
+        meetings: List of meetings, each with "days" (list), "start_time", "end_time", "location" (optional). Empty list for online courses.
+        grading: List of grading components, each with "name", "weight" (as decimal, e.g., 0.25 for 25%), "details" (optional)
+        grade_scale: List of grade cutoffs, each with "letter", "min_percent", "max_percent" (optional)
+        exams: List of exams, each with "name", "date", "time" (optional), "location" (optional)
+        policies: Dict with keys "late_work", "attendance", "academic_integrity", "makeup_exam" (all optional)
+        schedule: List of weekly topics, each with "week" (int), "topic", "due" (optional)
+        textbook: Required textbook (optional)
 
     Returns:
-        Confirmation message with parsed data summary
+        Confirmation message
     """
-    # TODO: Week 2 - Claude API로 structured extraction 구현
-    storage.save_syllabus(course_code, {"raw_text": syllabus_text, "parsed": False})
-    return f"Stored raw syllabus for {course_code} ({len(syllabus_text)} chars). Parsing not yet implemented."
+    syllabus_data = {
+        "course": {
+            "code": course_code,
+            "title": title,
+            "credits": credits,
+            "semester": semester,
+            "modality": modality,
+        },
+        "instructors": instructors,
+        "meetings": meetings,
+        "grading": grading,
+        "grade_scale": grade_scale,
+        "exams": exams,
+        "policies": policies,
+        "schedule": schedule,
+        "textbook": textbook,
+    }
+
+    storage.save_syllabus(course_code, syllabus_data)
+
+    return f"Successfully stored syllabus for {course_code}: {title} ({semester}). {len(exams)} exams, {len(grading)} grading components, {len(schedule)} weeks."
 
 
 if __name__ == "__main__":
