@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from mcp.server.fastmcp import FastMCP
 import storage
 
@@ -67,6 +68,87 @@ async def get_schedule(course_code: str) -> list[dict] | str:
     if not syllabus:
         return f"No syllabus found for {course_code}"
     return syllabus.get("schedule", [])
+
+
+@mcp.tool()
+async def export_calendar(course_code: str) -> str:
+    """
+    Export exam dates to calendar format (ICS).
+
+    Use this when user wants to add exams to Google Calendar, Apple Calendar, or any calendar app.
+    Returns ICS file content and instructions for importing to Google Calendar.
+
+    Args:
+        course_code: Course code like "CSE 351"
+
+    Returns:
+        ICS file content with import instructions
+    """
+    syllabus = storage.get_syllabus(course_code)
+    if not syllabus:
+        return f"No syllabus found for {course_code}"
+
+    exams = syllabus.get("exams", [])
+    if not exams:
+        return f"No exams found for {course_code}"
+
+    course_info = syllabus.get("course", {})
+    course_title = course_info.get("title", course_code)
+
+    # Build ICS content
+    ics_lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//SBU Syllabus MCP//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+    ]
+
+    for exam in exams:
+        exam_name = exam.get("name", "Exam")
+        exam_date = exam.get("date", "")
+        exam_time = exam.get("time", "")
+        exam_location = exam.get("location", "TBA")
+
+        # Create unique ID
+        uid = f"{course_code.replace(' ', '')}-{exam_name.replace(' ', '')}-{exam_date}@sbu-syllabus-mcp"
+
+        ics_lines.extend(
+            [
+                "BEGIN:VEVENT",
+                f"UID:{uid}",
+                f"SUMMARY:{course_code} - {exam_name}",
+                f"DESCRIPTION:Course: {course_title}\\nExam: {exam_name}",
+                f"LOCATION:{exam_location}",
+                f"DTSTART;VALUE=DATE:{exam_date.replace('/', '').replace('-', '')}",
+                "END:VEVENT",
+            ]
+        )
+
+    ics_lines.append("END:VCALENDAR")
+    ics_content = "\n".join(ics_lines)
+
+    # Return with instructions
+    return f"""## ICS Calendar File for {course_code}
+
+Save the content below as `{course_code.replace(' ', '_')}_exams.ics`:
+
+```
+{ics_content}
+```
+
+## How to Import to Google Calendar
+
+1. Go to [Google Calendar](https://calendar.google.com)
+2. Click the gear icon (⚙️) → **Settings**
+3. Select **Import & Export** from the left menu
+4. Click **Select file from your computer**
+5. Upload the `.ics` file
+6. Choose which calendar to add events to
+7. Click **Import**
+
+Your {len(exams)} exam(s) will be added to your calendar!
+"""
 
 
 @mcp.tool()
