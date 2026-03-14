@@ -84,5 +84,7 @@ async def upload_syllabus(course_code: str, syllabus_text: str) -> str:
 
 
 if __name__ == "__main__":
+    import uvicorn
+
     port = int(os.environ.get("PORT", 8000))
-    mcp.run(transport="sse", host="0.0.0.0", port=port)
+    uvicorn.run(mcp.sse_app(), host="0.0.0.0", port=port)
