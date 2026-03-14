@@ -1,35 +1,35 @@
 # SBU Syllabus MCP
 
-Stony Brook University 실라버스를 structured data로 변환하고, Claude Desktop에서 바로 조회할 수 있게 해주는 MCP 서버.
+An MCP server that converts Stony Brook University syllabi into structured data, queryable directly from Claude Desktop.
 
-## 뭘 하는 건가
+## What It Does
 
 ```
-[학생] → [Claude Desktop] → [MCP Server] → [Structured Syllabus Data]
-         "CSE 351 시험 언제야?"     ↓
-                              { exams: [...] }
+[Student] → [Claude Desktop] → [MCP Server] → [Structured Syllabus Data]
+            "When's my CSE 351 exam?"    ↓
+                                    { exams: [...] }
 ```
 
-실라버스 PDF를 업로드하면 자동으로 파싱해서:
-- 시험 날짜
-- 성적 비중
-- 과제 마감일
-- 출석/지각 정책
-- 주차별 스케줄
+Upload a syllabus PDF and it automatically parses:
+- Exam dates
+- Grading breakdown
+- Assignment deadlines
+- Attendance/late policies
+- Weekly schedule
 
-등을 structured JSON으로 저장. 이후 Claude Desktop에서 자연어로 질문하면 MCP tool을 통해 정확한 정보 제공.
+All stored as structured JSON. Query with natural language in Claude Desktop and get accurate info via MCP tools.
 
-## 설치
+## Installation
 
 ```bash
-git clone https://github.com/mkjun2016/sbu-syllabus-mcp
+git clone https://github.com/your-username/sbu-syllabus-mcp
 cd sbu-syllabus-mcp
 uv sync
 ```
 
-## Claude Desktop 연결
+## Connect to Claude Desktop
 
-`~/Library/Application Support/Claude/claude_desktop_config.json`:
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -43,62 +43,62 @@ uv sync
 }
 ```
 
-Claude Desktop 재시작 후 사용 가능.
+Restart Claude Desktop.
 
-## 사용법
+## Usage
 
-Claude Desktop에서:
+In Claude Desktop:
 
 ```
-# 실라버스 업로드
-[PDF 첨부] "이 실라버스 CSE 351로 업로드해줘"
+# Upload syllabus
+[Attach PDF] "Upload this as CSE 351"
 
-# 시험 일정 조회
-"CSE 351 시험 언제야?"
+# Check exam dates
+"When are my CSE 351 exams?"
 
-# 성적 비중 확인
-"CSE 351 성적 어떻게 매겨?"
+# Grading breakdown
+"How is CSE 351 graded?"
 
-# 정책 확인  
-"CSE 351 지각하면 어떻게 돼?"
+# Policy check
+"What's the late policy for CSE 351?"
 
-# 저장된 수업 목록
-"저장된 수업 뭐있어?"
+# List stored courses
+"What courses do I have stored?"
 ```
 
 ## MCP Tools
 
-| Tool | 설명 |
-|------|------|
-| `ping` | 연결 테스트 |
-| `list_courses` | 저장된 수업 코드 목록 |
-| `upload_syllabus` | 실라버스 텍스트 업로드 및 파싱 |
-| `get_syllabus` | 전체 실라버스 데이터 |
-| `get_exam_dates` | 시험 날짜만 |
-| `get_grading_breakdown` | 성적 비중만 |
-| `get_policies` | 출석/지각/과제 정책 |
-| `get_schedule` | 주차별 스케줄 |
+| Tool | Description |
+|------|-------------|
+| `ping` | Connection test |
+| `list_courses` | List stored course codes |
+| `upload_syllabus` | Upload and parse syllabus text |
+| `get_syllabus` | Full syllabus data |
+| `get_exam_dates` | Exam dates only |
+| `get_grading_breakdown` | Grading weights only |
+| `get_policies` | Attendance/late/makeup policies |
+| `get_schedule` | Weekly topics |
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 sbu-syllabus-mcp/
-├── server.py      # MCP 서버 + tool 정의
-├── storage.py     # JSON 파일 기반 저장소
-├── schema.py      # Pydantic 스키마
-├── syllabi.json   # 저장된 실라버스 데이터
+├── server.py      # MCP server + tool definitions
+├── storage.py     # JSON file storage
+├── schema.py      # Pydantic schemas
+├── syllabi.json   # Stored syllabus data
 └── pyproject.toml
 ```
 
-## 개발 로드맵
+## Roadmap
 
-- [x] Week 1: MCP 서버 세팅 + 스키마 설계
-- [ ] Week 2: Claude API로 PDF → structured JSON 파싱
-- [ ] Week 3: Query tools 고도화 + edge case 처리  
-- [ ] Week 4: 파싱 정확도 튜닝
-- [ ] Week 5: 베타 테스트
-- [ ] Week 6: 피드백 반영
-- [ ] Week 7: 문서화 + 배포
+- [x] Week 1: MCP server setup + schema design
+- [ ] Week 2: Claude API integration for PDF → structured JSON parsing
+- [ ] Week 3: Query tools refinement + edge case handling
+- [ ] Week 4: Parsing accuracy tuning
+- [ ] Week 5: Beta testing
+- [ ] Week 6: Feedback integration
+- [ ] Week 7: Documentation + deployment
 
 ## License
 

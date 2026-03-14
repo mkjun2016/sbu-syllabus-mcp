@@ -1,7 +1,7 @@
 [project]
 name = "sbu-syllabus-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "Syllabus parser for Stony Brook University using MCP"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

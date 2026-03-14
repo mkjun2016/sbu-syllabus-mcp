@@ -76,8 +76,8 @@ async def upload_syllabus(course_code: str, syllabus_text: str) -> str:
     Returns:
         Confirmation message with parsed data summary
     """
-    # TODO: Week 2 - Claude API로 structured extraction 구현
-    # 지금은 raw text만 저장
+    # TODO: Week 2 - Implement structured extraction with Claude API
+    # For now, only raw text is stored
     storage.save_syllabus(course_code, {"raw_text": syllabus_text, "parsed": False})
     return f"Stored raw syllabus for {course_code} ({len(syllabus_text)} chars). Parsing not yet implemented."
 
