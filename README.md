@@ -47,14 +47,41 @@ Attach PDF and say:
 
 ### 3. Query
 
+**Exams**
 > "When are my CSE 351 exams?"  
-> "How is LIN 200 graded?"  
-> "What's the late policy for CSE 300?"
+> "What's the date of the CSE 351 final?"  
+> "Show me all my upcoming exams"
+
+**Grading**
+> "How is CSE 351 graded?"  
+> "What percentage is the final worth in LIN 200?"  
+> "What do I need to get an A in CSE 300?"
+
+**Policies**
+> "What's the late policy for CSE 351?"  
+> "How many absences am I allowed in CSE 300?"  
+> "Can I make up a missed exam in LIN 200?"
+
+**Schedule**
+> "What's the CSE 351 schedule?"  
+> "What topic is covered in week 5 of LIN 200?"  
+> "When do we learn about machine learning in CSE 351?"
+
+**Calendar**
+> "Add CSE 351 exams to my Google Calendar"  
+> "Export LIN 200 exam dates to calendar"  
+> "I want to add all my exams to my calendar"
+
+**General**
+> "What courses do I have stored?"  
+> "Show me everything about CSE 351"  
+> "Who's the instructor for LIN 200?"
 
 ## Features
 
 - **Syllabus Parsing**: Extracts course info, exams, grading, policies, and weekly schedule
 - **Natural Language Queries**: Ask questions about any stored course
+- **Calendar Export**: Export exam dates as ICS file for Google Calendar / Apple Calendar
 - **Multi-Course Support**: Store and query multiple syllabi
 - **Zero API Cost**: Claude.ai handles parsing — no additional API keys needed
 - **Persistent Storage**: Data persists across sessions
@@ -92,6 +119,7 @@ Syllabus
 | `get_grading_breakdown` | Get grading weights |
 | `get_policies` | Get course policies |
 | `get_schedule` | Get weekly schedule |
+| `export_calendar` | Export exams as ICS for calendar import |
 | `list_courses` | List stored courses |
 
 ## Why MCP?
@@ -143,7 +171,7 @@ web: python server.py
 - [x] Claude.ai integration
 - [x] Structured syllabus upload
 - [x] Query tools (exams, grading, policies, schedule)
-- [ ] Calendar export (ICS)
+- [x] Calendar export (ICS)
 - [ ] Cross-course conflict detection
 - [ ] Deadline reminders
 
