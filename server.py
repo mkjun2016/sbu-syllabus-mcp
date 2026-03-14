@@ -1,3 +1,4 @@
+import os
 from mcp.server.fastmcp import FastMCP
 import storage
 
@@ -76,11 +77,12 @@ async def upload_syllabus(course_code: str, syllabus_text: str) -> str:
     Returns:
         Confirmation message with parsed data summary
     """
-    # TODO: Week 2 - Implement structured extraction with Claude API
-    # For now, only raw text is stored
+    # TODO: Week 2 - Claude API로 structured extraction 구현
+    # 지금은 raw text만 저장
     storage.save_syllabus(course_code, {"raw_text": syllabus_text, "parsed": False})
     return f"Stored raw syllabus for {course_code} ({len(syllabus_text)} chars). Parsing not yet implemented."
 
 
 if __name__ == "__main__":
-    mcp.run()
+    port = int(os.environ.get("PORT", 8000))
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
